@@ -34,47 +34,10 @@ public class GameEngineManager : MonoBehaviour
     public void ResumeSimulation() => isRunning = true;
 }
 
-// --- Placeholder Systems ---
-public static class PlayerDecisionSystem
-{
-    public static void Evaluate()
-    {
-        Debug.Log("Evaluating Player Decisions...");
-        // TODO: Determine what each champion should do
-    }
-}
 
-public static class ChampionManager
-{
-    public static void TickChampions()
-    {
-        Debug.Log("Ticking Champion States...");
-        // TODO: Update champion abilities, cooldowns, HP regen, etc.
-    }
-}
 
-public static class WaveManager
-{
-    public static void TickWaves()
-    {
-        Debug.Log("Advancing Minion Waves...");
-        // TODO: Move minions along lanes, resolve collisions or combat
-    }
-}
 
-public static class ObjectiveManager
-{
-    public static void TickObjectives()
-    {
-        Debug.Log("Handling Objectives...");
-        // TODO: Control turrets, neutral monsters, vision etc.
-    }
-}
 
-public static class EventLogger
-{
-    public static void FlushTickLogs()
-    {
-        // Flush logs for UI or debugging
-    }
-}
+
+
+
