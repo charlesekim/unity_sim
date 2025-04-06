@@ -4,19 +4,20 @@ using System.Collections.Generic;
 // --- Placeholder Systems ---
 public static class ChampionManager
 {
+    // Main entry per tick: handles all champion-related time-based logic
     public static void TickChampions(List<ChampionProfile> champions, float tickRate)
     {
         foreach (var champ in champions)
         {
-            TickRespawn(champ, tickRate);
-            TickCrowdControl(champ, tickRate);
-            TickChanneling(champ, tickRate);
-            TickActionCooldown(champ, tickRate);
-            TickAbilityCooldowns(champ, tickRate);
-            ApplyRegeneration(champ, tickRate);
-            TickModifiers(champ, tickRate);
-            TryCastAbility(champ);
-            LogChampionSummary(champ);
+            TickRespawn(champ, tickRate);       // Handle respawn logic
+            TickCrowdControl(champ, tickRate);  // Update CC effects
+            TickChanneling(champ, tickRate);    // Resolve channeling
+            TickActionCooldown(champ, tickRate);// Action throttle
+            TickAbilityCooldowns(champ, tickRate);// Abilities on cooldown
+            ApplyRegeneration(champ, tickRate); // Health/mana regen
+            TickModifiers(champ, tickRate);     // Buffs/debuffs
+            TryCastAbility(champ);              // Attempt spell cast
+            LogChampionSummary(champ);          // Debug summary
         }
     }
 
@@ -37,16 +38,26 @@ public static class ChampionManager
 
     private static void TickCrowdControl(ChampionProfile champ, float tickRate)
     {
-        if (champ.isCrowdControlled)
+        if (champ.activeCCs == null || champ.activeCCs.Count == 0)
         {
-            champ.ccTimer -= tickRate;
-            if (champ.ccTimer <= 0f)
+            champ.isCrowdControlled = false;
+            champ.ccType = null;
+            return;
+        }
+
+        for (int i = champ.activeCCs.Count - 1; i >= 0; i--)
+        {
+            var cc = champ.activeCCs[i];
+            cc.duration -= tickRate;
+            if (cc.duration <= 0f)
             {
-                champ.isCrowdControlled = false;
-                champ.ccType = null;
-                Debug.Log($"{champ.name} is no longer crowd controlled.");
+                champ.activeCCs.RemoveAt(i);
+                Debug.Log($"{champ.name}'s {cc.type} from {cc.source} has ended.");
             }
         }
+
+        champ.isCrowdControlled = champ.activeCCs.Exists(c => c.isHardCC);
+        champ.ccType = champ.isCrowdControlled ? champ.activeCCs[0].type : null;
     }
 
     private static void TickChanneling(ChampionProfile champ, float tickRate)

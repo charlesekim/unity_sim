@@ -11,9 +11,7 @@ public class ChampionProfile
     // --- Runtime Combat State ---
     public bool isAlive = true;                      // Whether the champion is currently alive
     public float deathTimer = 0f;                    // Time remaining until respawn
-    public bool isCrowdControlled = false;           // Flag for whether the champion is CC'd
-    public float ccTimer = 0f;                       // Duration remaining on current CC
-    public string ccType = null;                     // Type of CC applied (e.g., stun, root)
+    public List<CrowdControlEffect> ccEffects = new(); // List of active CC effects
     public Dictionary<string, float> activeCooldowns = new(); // Cooldowns for each ability or action
     public string currentAction;                     // Description of current action (e.g., moving, casting)
     public float actionCooldown;                     // Delay between actions or decisions
@@ -85,6 +83,7 @@ public class CombatProfile
 public class BaseStats
 {
     public float maxHP;
+    public float currentHP;
     public float baseHPRegen;
     public float maxMana;
     public float baseManaRegen;
