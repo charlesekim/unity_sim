@@ -28,7 +28,7 @@ public class GameEngineManager : MonoBehaviour
         Debug.Log("--- New Tick ---");
         Debug.Log("Simulation Time: " + simulationTime);
         PlayerDecisionSystem.Evaluate();
-        ChampionManager.TickChampions();
+        ChampionManager.TickChampions(champions, tickRate);
         WaveManager.TickWaves();
         ObjectiveManager.TickObjectives(); // placeholder for future systems
         EventLogger.FlushTickLogs();
